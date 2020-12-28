@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js /Users/eren.ozturk/Desktop/jars target"
+    "start": "node src/app.js /Users/eren.ozturk/Desktop/jars /Users/eren.ozturk/Desktop/target"
   },
   "keywords": [],
   "author": "",
