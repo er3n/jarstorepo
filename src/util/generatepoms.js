@@ -3,19 +3,28 @@ const fs = require('fs');
 
 const templateToString = (metaData) => {
   return `
-    <project>
-        <artifactId>${metaData.artifactId}</artifactId>
-        <groupId>${metaData.groupId}</groupId>
-        <version>${metaData.version}</version>
-        <properties>
-            ${Object.keys(metaData.properties)
-              .map((item) => {
-                const detail = metaData.properties[item];
-                return `<${item}>${detail}</${item}>
-                `;
-              })
-              .join('')}
-        </properties>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>${metaData.artifactId}</artifactId>
+    <version>${metaData.version}</version>
+    <packaging>pom</packaging>
+    <name>${metaData.artifactId}</name>
+
+    <properties>
+        <java.version>1.8</java.version>
+        ${Object.keys(metaData.properties)
+          .map((item) => {
+            const detail = metaData.properties[item];
+            return `<${item}>${detail}</${item}>
+            `;
+          })
+          .join('')}
+    </properties>
+
+    <dependencyManagement>
         <dependencies>
             ${Object.keys(metaData.dependencies)
               .map((item) => {
@@ -28,11 +37,11 @@ const templateToString = (metaData) => {
                 </dependency>
                 `;
               })
-              .join('')}
+              .join('')}           
         </dependencies>
-    
-    </project>
-    `;
+    </dependencyManagement>
+</project>
+  `;
 };
 
 const createParentPom = (metaData, destinationFolder) => {
@@ -48,8 +57,6 @@ const createParentPom = (metaData, destinationFolder) => {
     fs.writeFile(`${path}/pom.xml`, str, 'utf8', () => {
       resolve();
     });
-
-    console.log(str);
   });
 };
 

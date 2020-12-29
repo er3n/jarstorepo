@@ -3,9 +3,12 @@ const streamUtils = require('./stream-utils');
 const fileUtils = require('./file-utils');
 
 const getProperties = (content) => {
-  let res = content.replace(/\n\s/g, '=');
-  res = res.replace(/\n/g, '=');
-  res.replace('?', '');
+  let res;
+  if (content.includes('\r\n')) {
+    res = content.replace(/\r\n/g, '=');
+  } else {
+    res = content.replace(/\n/g, '=');
+  }
   res = res.split(/=/g);
   const [, artifactId, , groupId, , version] = res;
   return {
